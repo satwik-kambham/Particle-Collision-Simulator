@@ -1,12 +1,46 @@
-import java.awt.Color;
-import java.awt.Graphics;
+import java.awt.*;
+import java.awt.image.*;
 import javax.swing.*;
 
-public class Simulation {
+public class Simulation extends Canvas {
     private static Particle[] particles; // the array containing all the particles
     private static Vector dimensions = new Vector(400, 400);
     private static int n = 10; // the number of particles in the simulation
     private static JFrame frame;
+    private static Simulation simulation;
+    private static BufferedImage bufferedImage;
+    private static Graphics2D big;
+    private static boolean firstTime = true;
+
+    Simulation() {
+        setBackground(Color.BLACK);
+        bufferedImage = new BufferedImage((int) dimensions.x, (int) dimensions.y, BufferedImage.TYPE_INT_RGB);
+        big = bufferedImage.createGraphics();
+        big.dispose();
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        Graphics2D g2 = (Graphics2D) g;
+        if (firstTime) {
+            Dimension dim = getSize();
+            int w = dim.width;
+            int h = dim.height;
+            bufferedImage = (BufferedImage) createImage(w, h);
+            big = bufferedImage.createGraphics();
+            firstTime = false;
+        }
+        big.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        big.setColor(Color.BLACK);
+        big.fillRect(0, 0, (int) dimensions.x, (int) dimensions.y);
+        big.setColor(Color.WHITE);
+        for (Particle particle : particles) {
+            big.fillOval((int) particle.position.x, (int) particle.position.y, 2 * particle.radius,
+                    2 * particle.radius);
+        }
+
+        g2.drawImage(bufferedImage, 0, 0, this);
+    }
 
     // Updates the particle's variables when they collide
     private static void collide(Particle p1, Particle p2) {
@@ -29,10 +63,10 @@ public class Simulation {
             double fy = magnitude * dy / dist;
 
             // updating postion so that they do not overlap
-            p1.position.x -= p1.velocity.x;
-            p1.position.y -= p1.velocity.y;
-            p2.position.x -= p2.velocity.x;
-            p2.position.y -= p2.velocity.y;
+            p1.position.x -= p1.velocity.x + Integer.signum((int) p1.velocity.x) * Particle.acceleration * 2;
+            p1.position.y -= p1.velocity.y + Integer.signum((int) p1.velocity.y) * Particle.acceleration * 2;
+            p2.position.x -= p2.velocity.x + Integer.signum((int) p2.velocity.x) * Particle.acceleration * 2;
+            p2.position.y -= p2.velocity.y + Integer.signum((int) p2.velocity.y) * Particle.acceleration * 2;
 
             // update velocities according to normal force
             p2.velocity.x += fx / p2.mass;
@@ -68,19 +102,12 @@ public class Simulation {
             particles[i] = new Particle(dimensions);
         }
 
-        frame = new JFrame("Particle Collision Simulator") {
-            @Override
-            public void paint(Graphics g) {
-                g.setColor(Color.BLACK);
-                g.fillRect(0, 0, (int) dimensions.x, (int) dimensions.y);
-                g.setColor(Color.white);
-                for (Particle particle : particles) {
-                    g.fillOval((int) particle.position.x, (int) particle.position.y, 2 * particle.radius,
-                            2 * particle.radius);
-                }
-            }
-        };
-        frame.setSize((int) dimensions.x, (int) dimensions.y);
+        frame = new JFrame("Particle Collision Simulator");
+        simulation = new Simulation();
+        simulation.setBounds(10, 10, (int) dimensions.x, (int) dimensions.y);
+        frame.add(simulation);
+
+        frame.pack();
         frame.setLayout(null);
         frame.setResizable(false);
         frame.setLocationByPlatform(true);
@@ -112,9 +139,9 @@ public class Simulation {
         }
 
         // Drawing the particles
-        frame.repaint();
+        simulation.repaint();
 
-        Thread.sleep(5);
+        Thread.sleep(15);
     }
 
 }

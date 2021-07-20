@@ -6,13 +6,14 @@ public class Particle {
     public Vector position;
     public Vector velocity;
     public static Random random = new Random();
+    public static double acceleration = 0.005;
 
     Particle(Vector dimensions) {
         this.radius = random.nextInt(10) + 10;
         this.mass = (int) ((Math.PI * radius * radius) / 15);
         this.position = new Vector(random.nextInt((int) dimensions.x - 2 * radius) + radius,
                 random.nextInt((int) dimensions.y - 2 * radius) + radius);
-        this.velocity = new Vector(random.nextInt(3) - 1, random.nextInt(3) - 1);
+        this.velocity = new Vector(random.nextInt(9) - 4, random.nextInt(9) - 4);
     }
 
     Particle(Vector dimensions, Vector position) {
@@ -30,16 +31,11 @@ public class Particle {
     }
 
     public void progress() {
+        // giving the object slight acceleration
+        velocity.x += Integer.signum((int) velocity.x) * acceleration;
+        velocity.y += Integer.signum((int) velocity.y) * acceleration;
+
         position.x += velocity.x;
         position.y += velocity.y;
-    }
-
-    public static void main(String[] args) {
-        Vector dimensions = new Vector(400, 400);
-        Particle[] particles = new Particle[2];
-        for (int i = 0; i < particles.length; i++) {
-            particles[i] = new Particle(dimensions);
-        }
-        System.out.println(particles[0].position.x);
     }
 }
