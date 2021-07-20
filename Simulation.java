@@ -82,6 +82,8 @@ public class Simulation {
         };
         frame.setSize((int) dimensions.x, (int) dimensions.y);
         frame.setLayout(null);
+        frame.setResizable(false);
+        frame.setLocationByPlatform(true);
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
