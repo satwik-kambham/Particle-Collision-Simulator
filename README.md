@@ -2,6 +2,8 @@
 
 A particles collision simulator in which n bodies are placed in a box with certain initial velocities.
 
+![Simulator output](https://github.com/code-explorer/Particle-Collision-Simulator/blob/main/Time%20driven%20particle%20collision.gif)
+
 ## Instructions to run
 There are two ways to run this program:
 
