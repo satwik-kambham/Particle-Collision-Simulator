@@ -7,7 +7,7 @@ public class Vector {
         y = 0;
     }
 
-    Vector(int x, int y) {
+    Vector(double x, double y) {
         this.x = x;
         this.y = y;
     }

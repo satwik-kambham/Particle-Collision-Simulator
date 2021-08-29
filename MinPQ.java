@@ -2,13 +2,19 @@ import java.util.Random;
 
 public class MinPQ {
     private Event[] arr; // array holding the priority queue
-    private int n; // number of elements in the queue
+    public int n; // number of elements in the queue
 
     // Constructor
     MinPQ(Event[] a) {
         arr = a;
         n = a.length;
         arrayToPQ();
+    }
+
+    // Constructor
+    MinPQ() {
+        arr = new Event[10];
+        n = 0;
     }
 
     // Doubles the size of the array
@@ -53,6 +59,7 @@ public class MinPQ {
 
     // Add event to the PQ
     public void addEvent(Event event) {
+        System.out.println("adding event" + n);
         if (arr.length <= ++n) {
             doubleSize();
         }
@@ -83,7 +90,7 @@ public class MinPQ {
     }
 
     // Check when the next event will happen
-    public int getTimeToNextEvent() {
+    public double getTimeToNextEvent() {
         return arr[0].timestamp;
     }
 
@@ -117,7 +124,7 @@ public class MinPQ {
         }
 
         int count = pq.n;
-        int x = pq.getNextEvent().timestamp, y;
+        double x = pq.getNextEvent().timestamp, y;
         for (int i = 1; i < count; i++) {
             System.out.print(x + " ");
             y = x;
