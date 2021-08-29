@@ -43,14 +43,7 @@ public class EDSimulation extends Canvas {
         }
 
         g2.drawImage(bufferedImage, 0, 0, this);
-        System.out.println("Redrawing");
         minPQ.addEvent(new Event(null, null, t + 1.0 / dr));
-
-        try {
-            Thread.sleep(15);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     // add predictions to PQ
@@ -75,7 +68,7 @@ public class EDSimulation extends Canvas {
         // Creating n random particles
         particles = new Particle[n];
         for (int i = 0; i < particles.length; i++) {
-            particles[i] = new Particle(dimensions);
+            particles[i] = new Particle(dimensions, new Vector((dimensions.x / (n + 2)) * (i + 1), dimensions.y / 2));
         }
 
         frame = new JFrame("Event Driven Particle Collision Simulator");
@@ -98,7 +91,6 @@ public class EDSimulation extends Canvas {
 
         // the main event-driven simulation loop
         while (minPQ.n != 0) {
-
             // get impending event, discard if invalidated
             Event e = minPQ.getNextEvent();
             if (!e.isValid())
@@ -121,9 +113,10 @@ public class EDSimulation extends Canvas {
             else if (a == null && b == null)
                 simulation.repaint(); // redraw event
 
-            // update the priority queue with new collisions involving a or b
+            // update the priority queue with new collisions involving a or b 
             predict(a);
             predict(b);
+            Thread.sleep(15);
         }
     }
 

@@ -19,10 +19,10 @@ public class Particle {
     }
 
     Particle(Vector dimensions, Vector position) {
-        this.mass = 10;
-        this.radius = 5;
+        this.radius = 10;
+        this.mass = (int) ((Math.PI * radius * radius) / 15);
         this.position = position;
-        this.velocity = new Vector();
+        this.velocity = new Vector(random.nextInt(9) - 4, random.nextInt(9) - 4);
         count = 0;
     }
 

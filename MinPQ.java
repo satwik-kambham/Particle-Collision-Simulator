@@ -59,7 +59,6 @@ public class MinPQ {
 
     // Add event to the PQ
     public void addEvent(Event event) {
-        System.out.println("adding event" + n);
         if (arr.length <= ++n) {
             doubleSize();
         }
